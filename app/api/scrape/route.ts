@@ -1,29 +1,18 @@
-// Import a helper from Next.js that lets us send JSON responses
+// Single consolidated implementation of the scrape endpoint.
 import { NextResponse } from "next/server";
-
-// Import axios so we can fetch the website's HTML
 import axios from "axios";
-
-// Import cheerio so we can load and clean the HTML (like jQuery but for backend)
 import * as cheerio from "cheerio";
 
-// This function runs whenever someone makes a POST request to /api/scrape
+// API: POST /api/scrape
 export async function POST(request: Request) {
   try {
-    // ------------------------------------------------------------
-    // STEP 1 — Read the URL from the request body
-    // ------------------------------------------------------------
+    // STEP 1 — Validate URL
     const { url } = await request.json();
     if (!url || !url.startsWith("http")) {
-      return NextResponse.json(
-        { error: "Invalid URL" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Invalid URL" }, { status: 400 });
     }
 
-    // ------------------------------------------------------------
-    // STEP 2 — Fetch the webpage HTML
-    // ------------------------------------------------------------
+    // STEP 2 — Fetch webpage
     const response = await axios.get(url, {
       timeout: 8000,
       headers: {
@@ -34,83 +23,53 @@ export async function POST(request: Request) {
 
     const rawHtml = response.data;
 
-    // ------------------------------------------------------------
-    // STEP 3 — Load HTML into Cheerio
-    // ------------------------------------------------------------
-    const $ = cheerio.load(rawHtml);
+    // STEP 3 — Preprocessor: remove comment blocks and IE conditionals
+    const preprocessedHtml = rawHtml
+      .replace(/<!--\[if[\s\S]*?\]>[\s\S]*?<!\[endif\]-->/gi, "") // IE conditionals
+      .replace(/<!--[\s\S]*?-->/g, ""); // All comments
 
-    // ------------------------------------------------------------
-    // CLEANING STEP 1 — Remove script + style tags
-    // ------------------------------------------------------------
+    // STEP 4 — Load into Cheerio
+    const $ = cheerio.load(preprocessedHtml);
+
+    // STEP 5 — Remove unwanted blocks
     $("script").remove();
     $("style").remove();
+    $("noscript").remove();
+    $('link[rel="stylesheet"]').remove();
 
-    // ------------------------------------------------------------
-    // CLEANING STEP 2 — Remove inline CSS (style="...")
-    // ------------------------------------------------------------
+    // STEP 6 — Remove inline styles
     $("*").each((_, el) => {
       if ($(el).attr("style")) {
         $(el).removeAttr("style");
       }
     });
 
-    // ------------------------------------------------------------
-    // CLEANING STEP 3 — Remove inline JS handlers (onclick, onload, etc.)
-    // ------------------------------------------------------------
+    // STEP 7 — Remove event handlers like onclick="", onload=""
     $("*").each((_, el) => {
       if (el && el.type === "tag") {
-        for (const attr in el.attribs || {}) {
-          if (attr.startsWith("on")) {
+        const attribs = el.attribs || {};
+        for (const attr in attribs) {
+          if (attr.toLowerCase().startsWith("on")) {
             $(el).removeAttr(attr);
           }
         }
       }
     });
 
-    // ------------------------------------------------------------
-    // CLEANING STEP 4 — Remove style="" inside comment blocks (but keep comments for now)
-    // ------------------------------------------------------------
-    $("*")
-      .contents()
-      .each(function () {
-        if (this.type === "comment") {
-          this.data = this.data.replace(/style\s*=\s*"[^"]*"/g, "");
-          this.data = this.data.replace(/style\s*=\s*'[^']*'/g, "");
-        }
-      });
-
-    // ------------------------------------------------------------
-    // CLEANING STEP 5 — NOW remove all HTML comments everywhere
-    // ------------------------------------------------------------
-    $("*")
-      .contents()
-      .each(function () {
-        if (this.type === "comment") {
-          $(this).remove();
-        }
-      });
-
-    // ------------------------------------------------------------
-    // CLEANING STEP 6 — Final regex cleanup on full HTML
-    // ------------------------------------------------------------
+    // STEP 8 — Final regex cleaning on raw HTML output
     let finalHtml = $.html();
 
     finalHtml = finalHtml.replace(/style\s*=\s*"[^"]*"/g, "");
     finalHtml = finalHtml.replace(/style\s*=\s*'[^']*'/g, "");
     finalHtml = finalHtml.replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, "");
-    finalHtml = finalHtml.replace(/\son[a-zA-Z]+\s*=\s*("[^"]*"|'[^']*'|[^>\s]+)/gi, "");
+    finalHtml = finalHtml.replace(/on[a-zA-Z:-]+\s*=\s*("[^"]*"|'[^']*'|[^>\s]+)/gi, "");
 
-    // ------------------------------------------------------------
-    // STEP 4 — Return cleaned HTML to frontend
-    // ------------------------------------------------------------
+    // Return cleaned HTML for AI processing
     return NextResponse.json({ html: finalHtml });
 
   } catch (error: any) {
     return NextResponse.json(
-      {
-        error: "Failed to scrape site",
-        details: error.message,
-      },
+      { error: "Failed to scrape site", details: error.message },
       { status: 500 }
     );
   }

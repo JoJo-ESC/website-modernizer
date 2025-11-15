@@ -7,7 +7,6 @@ import axios from "axios";
 // Import cheerio so we can load and clean the HTML (like jQuery but for backend)
 import * as cheerio from "cheerio";
 
-
 // This function runs whenever someone makes a POST request to /api/scrape
 export async function POST(request: Request) {
   try {

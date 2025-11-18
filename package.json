@@ -12,6 +12,11 @@
     "openai:ping": "ts-node scripts/openai-ping.ts"
   },
   "dependencies": {
+    "bootstrap": "^5.3.8",
+    "next": "16.0.3",
+    "react": "19.2.0",
+    "react-bootstrap": "^2.10.10",
+    "react-dom": "19.2.0"
     "axios": "^1.13.2",
     "cheerio": "^1.1.2",
     "next": "16.0.3",

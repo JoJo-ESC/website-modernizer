@@ -14,18 +14,34 @@ export default function HomePage() {
   }
 
   return (
-    <main className="relative min-h-screen w-full bg-black text-white overflow-hidden">
+    <main className="flex flex-col min-h-screen w-full bg-black text-white overflow-hidden">
 
       {/* 🔹 Hexagon Background Overlay */}
-      <div className="absolute inset-0 opacity-[0.10] pointer-events-none bg-[url('/hex.svg')] bg-cover"></div>
+     <div className="absolute inset-0 bg-[url('/hexglow.svg')] bg-repeat opacity-100 pointer-events-none"></div>
+
+
+
 
       {/* 🔹 NAVBAR */}
       <nav className="relative z-10 flex justify-between items-center px-12 py-8">
         <div className="text-3xl font-bold tracking-tight">revamp.ai</div>
+        <div className="text-white drop-shadow-[0_0_12px_rgba(255,255,255,0.35)]"></div>
 
-        <div className="hidden md:flex gap-12 text-lg">
-          <Link href="#" className="hover:text-gray-400 transition">How It Works</Link>
-          <Link href="#" className="hover:text-gray-400 transition">About Us</Link>
+
+        <div className="hidden md:flex gap-12 text-lg items-center">
+          <Link
+            href="/howitworks"
+            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-black hover:text-white transition-all duration-300"
+          >
+            How It Works
+          </Link>
+
+          <Link
+            href="/about"
+            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-black hover:text-white transition-all duration-300"
+          >
+            About Us
+          </Link>
         </div>
 
         <button className="bg-white text-black px-6 py-2 rounded-md font-medium hover:bg-gray-200">
@@ -34,24 +50,25 @@ export default function HomePage() {
       </nav>
 
       {/* 🔹 HERO SECTION */}
-      <section className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10 px-12 mt-24">
+     <section className="relative z-10 flex-1 grid grid-cols-1 md:grid-cols-2 gap-10 items-center px-12 md:px-24 min-h-[80vh]">
 
         {/* LEFT COLUMN */}
-        <div className="pr-10">
-          <h1 className="text-6xl md:text-7xl font-bold leading-tight max-w-xl">
+        <div>
+         <h1 className="text-5xl md:text-6xl font-bold leading-tight mb-6 drop-shadow-[0_0_100px_rgba(255,255,255,0.7)]">
             Revamp your <br /> website. Bring <br /> it into the future.
           </h1>
 
-          <p className="text-gray-300 text-xl mt-6">
+
+          <p className="text-gray-400 text-lg">
             Clean design, modern UI, zero effort.
           </p>
         </div>
 
         {/* RIGHT COLUMN */}
-        <div className="flex justify-center md:justify-start">
-          <div className="bg-black/40 backdrop-blur-md p-8 rounded-xl border border-white/10 w-full max-w-md shadow-xl">
-            <h2 className="text-3xl font-semibold leading-snug mb-6">
-              Don’t believe us? <br /> Try it.
+        <div className="flex justify-center md:justify-end">
+          <div className="bg-black/40 backdrop-blur-md p-8 rounded-xl border border-zinc-700 w-full max-w-md shadow-lg">
+            <h2 className="text-2xl font-semibold mb-4">
+              Don't believe us? <br /> Try it.
             </h2>
 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
@@ -60,7 +77,7 @@ export default function HomePage() {
                 placeholder="Enter a URL"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="bg-black border border-white/20 px-4 py-3 rounded-md focus:outline-none focus:ring-2 focus:ring-white/40"
+                className="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
               />
 
               <button

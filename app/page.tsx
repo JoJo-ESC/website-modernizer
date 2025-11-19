@@ -1,6 +1,7 @@
+// --- your imports ---
 "use client";
-
 import { useState } from "react";
+import HtmlPreview from "./components/HtmlPreview";
 
 export default function Home() {
   const [inputHtml, setInputHtml] = useState("");
@@ -19,10 +20,10 @@ export default function Home() {
       });
 
       const data = await res.json();
-      setOutputHtml(data.modernized || "No output received.");
-    } catch (err) {
-      console.error(err);
-      setOutputHtml("Error modernizing HTML.");
+      if (data.modernized) setOutputHtml(data.modernized);
+      else setOutputHtml("");
+    } catch {
+      setOutputHtml("");
     }
 
     setLoading(false);
@@ -31,67 +32,94 @@ export default function Home() {
   return (
     <main className="bg-black text-white min-h-screen px-12 py-10 font-sans">
 
-      {/* 🌐 NAVBAR */}
+      {/* NAVBAR */}
       <nav className="flex justify-between items-center py-6">
         <div className="text-3xl font-bold tracking-tight">revamp.ai</div>
 
         <div className="hidden md:flex gap-10 text-lg">
           <a
-          href="#"
-          className="text-white font-semibold text-lg hover:text-gray-400 transition-colors duration-200"
-        >
-          How It Works
-        </a>
-        <a
-          href="#"
-          className="text-white font-semibold text-lg hover:text-gray-400 transition-colors duration-200"
-        >
-          About Us
-        </a>
-                </div>
+            className="text-white font-semibold tracking-wide hover:text-gray-400 transition-colors duration-200"
+            style={{ textDecoration: "none" }}
+          >
+            How It Works
+          </a>
+          <a
+            className="text-white font-semibold tracking-wide hover:text-gray-400 transition-colors duration-200"
+            style={{ textDecoration: "none" }}
+          >
+            About Us
+          </a>
+        </div>
+
         <button className="bg-white text-black px-5 py-2 rounded-md font-medium hover:bg-gray-200">
           Sign Up
         </button>
       </nav>
 
-      {/* 🖥️ HERO SECTION */}
-      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-20">
+      {/* TWO COLUMNS */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-12">
 
-        {/* LEFT — Modernized Output */}
-        <div className="bg-zinc-900 p-6 rounded-xl min-h-[420px] border border-zinc-800">
-          <h2 className="text-xl font-semibold mb-4">Modernized Output</h2>
+        {/* LEFT SIDE — text input + original preview */}
+        <div className="space-y-8">
 
-          <div className="bg-black/40 p-4 rounded-lg min-h-[300px] overflow-auto border border-zinc-700 text-gray-300">
-            {outputHtml ? (
-              <pre className="whitespace-pre-wrap text-gray-200">
-                {outputHtml}
-              </pre>
+          {/* Text input */}
+          <div className="bg-zinc-900 p-6 rounded-xl border border-zinc-800">
+            <h2 className="text-xl font-semibold mb-4">Paste Your HTML Below</h2>
+            <textarea
+              className="w-full h-48 bg-black border border-gray-700 p-3 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              placeholder="<div>Hello World</div>"
+              value={inputHtml}
+              onChange={(e) => setInputHtml(e.target.value)}
+            />
+            <button
+              onClick={handleModernize}
+              disabled={loading}
+              className="mt-5 w-full py-3 rounded-md bg-emerald-500 hover:bg-emerald-600 transition font-medium disabled:opacity-50"
+            >
+              {loading ? "Modernizing..." : "Modernize"}
+            </button>
+          </div>
+
+          {/* Original Preview */}
+          <div className="bg-zinc-900 p-6 rounded-xl min-h-[320px] border border-zinc-800">
+            <h3 className="text-lg font-semibold mb-3">Original (Input Preview)</h3>
+            {inputHtml ? (
+              <HtmlPreview html={inputHtml} />
             ) : (
-              <p className="text-gray-500">Your modernized HTML will appear here.</p>
+              <p className="text-gray-500">Paste HTML above to preview it here.</p>
             )}
           </div>
+
         </div>
 
-        {/* RIGHT — Input + Button */}
-        <div className="bg-zinc-900 p-6 rounded-xl min-h-[420px] border border-zinc-800">
-          <h2 className="text-xl font-semibold mb-4">Paste Your HTML Below</h2>
+        {/* RIGHT SIDE — modernized preview + raw HTML */}
+        <div className="space-y-8">
 
-          <textarea
-            className="w-full h-48 bg-black border border-gray-700 p-3 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            placeholder="<div>Hello World</div>"
-            value={inputHtml}
-            onChange={(e) => setInputHtml(e.target.value)}
-          />
+          {/* Modernized Preview */}
+          <div className="bg-zinc-900 p-6 rounded-xl min-h-[320px] border border-zinc-800">
+            <h3 className="text-lg font-semibold mb-3">Modernized (AI Output)</h3>
+            {outputHtml ? (
+              <HtmlPreview html={outputHtml} />
+            ) : (
+              <p className="text-gray-500">Click Modernize to see the redesigned result.</p>
+            )}
+          </div>
 
-          <button
-            onClick={handleModernize}
-            disabled={loading}
-            className="mt-5 w-full py-3 rounded-md bg-emerald-500 hover:bg-emerald-600 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? "Modernizing..." : "Modernize"}
-          </button>
+          {/* Modernized Raw Code */}
+          <div className="bg-zinc-900 p-6 rounded-xl min-h-[240px] border border-zinc-800">
+            <h2 className="text-xl font-semibold mb-4">Modernized HTML (Raw)</h2>
+            <div className="bg-black/40 p-4 rounded-lg min-h-[160px] overflow-auto border border-zinc-700 text-gray-300">
+              {outputHtml ? (
+                <pre className="whitespace-pre-wrap text-gray-200">{outputHtml}</pre>
+              ) : (
+                <p className="text-gray-500">Modernized HTML will appear here.</p>
+              )}
+            </div>
+          </div>
+
         </div>
       </section>
+
     </main>
   );
 }

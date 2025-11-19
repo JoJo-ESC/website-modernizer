@@ -91,10 +91,11 @@ export async function POST(req: Request) {
       );
     }
 
-    const client = new OpenAI({ 
-      apiKey,
-      baseURL: process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1'
-    });
+     const client = new OpenAI({
+      apiKey: process.env.OPENROUTER_API_KEY,
+      baseURL: "https://openrouter.ai/api/v1"
+     }as any);
+
     const model = process.env.OPENAI_MODEL || 'gpt-4o-mini';
 
     // First attempt

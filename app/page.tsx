@@ -1,130 +1,97 @@
-import Image from "next/image";
-import { Row, Col, Container, Button, Form, Nav, Navbar, NavbarBrand, NavbarToggle, NavbarCollapse, NavLink } from 'react-bootstrap';
+"use client";
+
+import { useState } from "react";
 
 export default function Home() {
+  const [inputHtml, setInputHtml] = useState("");
+  const [outputHtml, setOutputHtml] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  async function handleModernize() {
+    setLoading(true);
+    setOutputHtml("");
+
+    try {
+      const res = await fetch("/api/modernize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ html: inputHtml }),
+      });
+
+      const data = await res.json();
+      setOutputHtml(data.modernized || "No output received.");
+    } catch (err) {
+      console.error(err);
+      setOutputHtml("Error modernizing HTML.");
+    }
+
+    setLoading(false);
+  }
+
   return (
-    <>
-      <Navbar collapseOnSelect expand="lg" className="bg-emerald-600">
-        <Container>
-          <NavbarBrand href="#5">
-            <Image
-              src="/logo_temp.svg"
-              alt="Temporary Logo"
-              width={75}
-              height={75}
-            />
-          </NavbarBrand>
-          <NavbarToggle aria-controls="responsive-navbar-nav"/>
-          <NavbarCollapse id="responsive-navbar-nav">
-            <Nav className="me-auto">
-              <NavLink className="font-bold navbar-text-custom" href="#1">Revamp</NavLink>
-              <NavLink className="font-bold navbar-text-custom" href="#2">Information</NavLink>
-              <NavLink className="font-bold navbar-text-custom" href="#3">About Us</NavLink>
-            </Nav>
+    <main className="bg-black text-white min-h-screen px-12 py-10 font-sans">
 
-            <Nav>
-              <NavLink href="#4"><Button variant="secondary">Signup</Button></NavLink>
-            </Nav>
-          </NavbarCollapse>
-        </Container>
-      </Navbar>
+      {/* 🌐 NAVBAR */}
+      <nav className="flex justify-between items-center py-6">
+        <div className="text-3xl font-bold tracking-tight">revamp.ai</div>
 
-      <Container>
-        <Row className="h-100">
-          <Col />
-          <Col>
-          </Col>
-          <Col />
-        </Row>
-      </Container>
-      {/* <div className="bg-emerald-600 flex justify-around">
-        <div className="flex justify-evenly items-center w-1/3 h-20">
-            <Image
-              src="/logo_temp.svg"
-              alt="Temporary Logo"
-              width={75}
-              height={75}
-            />
-          <a className='font-bold hover:text-gray-700' href="#">Revamp</a>
-          <a className='font-bold hover:text-gray-700' href="#">Information</a>
-          <a className='font-bold hover:text-gray-700' href="#">About Us</a>
-        </div>
+        <div className="hidden md:flex gap-10 text-lg">
+          <a
+          href="#"
+          className="text-white font-semibold text-lg hover:text-gray-400 transition-colors duration-200"
+        >
+          How It Works
+        </a>
+        <a
+          href="#"
+          className="text-white font-semibold text-lg hover:text-gray-400 transition-colors duration-200"
+        >
+          About Us
+        </a>
+                </div>
+        <button className="bg-white text-black px-5 py-2 rounded-md font-medium hover:bg-gray-200">
+          Sign Up
+        </button>
+      </nav>
 
-        <div className="flex items-center justify-end w-1/3 h-20">
-          <a className='font-bold hover:text-gray-700 float-right' href="#">Signup</a>
-        </div>
-      </div>
+      {/* 🖥️ HERO SECTION */}
+      <section className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-20">
 
-      <div className="grid grid-cols-3 gap-4">
-        <div className="col-span-1"></div>
-        <div className="flex flex-col col-span-1 h-screen">
-          <div className="flex flex-col justify-end text-center items-center h-1/3 w-full">
-            <h1 className="font-bold text-[3.5em]">revamp.ai</h1>
-            <p className="m-4">Modernize your front-end simply with the click of a button. Our AI will handle the freshen the website up to a modern standard.</p>
-            <button className='bg-emerald-600 w-1/2 p-4 mt-5 rounded-md'> Revamp Me!</button>
+        {/* LEFT — Modernized Output */}
+        <div className="bg-zinc-900 p-6 rounded-xl min-h-[420px] border border-zinc-800">
+          <h2 className="text-xl font-semibold mb-4">Modernized Output</h2>
+
+          <div className="bg-black/40 p-4 rounded-lg min-h-[300px] overflow-auto border border-zinc-700 text-gray-300">
+            {outputHtml ? (
+              <pre className="whitespace-pre-wrap text-gray-200">
+                {outputHtml}
+              </pre>
+            ) : (
+              <p className="text-gray-500">Your modernized HTML will appear here.</p>
+            )}
           </div>
         </div>
-        <div className="col-span-1"></div>
-      </div> */}
-    </>
-    // <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-    //   <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-    //     <Image
-    //       className="dark:invert"
-    //       src="/next.svg"
-    //       alt="Next.js logo"
-    //       width={100}
-    //       height={20}
-    //       priority
-    //     />
-    //     <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-    //       <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-    //         To get started, edit the page.tsx file.
-    //       </h1>
-    //       <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-    //         Looking for a starting point or more instructions? Head over to{" "}
-    //         <a
-    //           href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-    //           className="font-medium text-zinc-950 dark:text-zinc-50"
-    //         >
-    //           Templates
-    //         </a>{" "}
-    //         or the{" "}
-    //         <a
-    //           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-    //           className="font-medium text-zinc-950 dark:text-zinc-50"
-    //         >
-    //           Learning
-    //         </a>{" "}
-    //         center.
-    //       </p>
-    //     </div>
-    //     <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-    //       <a
-    //         className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-    //         href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-    //         target="_blank"
-    //         rel="noopener noreferrer"
-    //       >
-    //         <Image
-    //           className="dark:invert"
-    //           src="/vercel.svg"
-    //           alt="Vercel logomark"
-    //           width={16}
-    //           height={16}
-    //         />
-    //         Deploy Now
-    //       </a>
-    //       <a
-    //         className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-    //         href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-    //         target="_blank"
-    //         rel="noopener noreferrer"
-    //       >
-    //         Documentation
-    //       </a>
-    //     </div>
-    //   </main>
-    // </div>
+
+        {/* RIGHT — Input + Button */}
+        <div className="bg-zinc-900 p-6 rounded-xl min-h-[420px] border border-zinc-800">
+          <h2 className="text-xl font-semibold mb-4">Paste Your HTML Below</h2>
+
+          <textarea
+            className="w-full h-48 bg-black border border-gray-700 p-3 rounded-md text-gray-200 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            placeholder="<div>Hello World</div>"
+            value={inputHtml}
+            onChange={(e) => setInputHtml(e.target.value)}
+          />
+
+          <button
+            onClick={handleModernize}
+            disabled={loading}
+            className="mt-5 w-full py-3 rounded-md bg-emerald-500 hover:bg-emerald-600 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            {loading ? "Modernizing..." : "Modernize"}
+          </button>
+        </div>
+      </section>
+    </main>
   );
 }

@@ -27,6 +27,33 @@ body {
 
 .navbar-text-custom {
   font-size: 1.25em;
-  color: black;
+  color: whitesmoke;
 }
+
+.navbar-color {
+  background-color: blue !important;
+}
+
+/* Navbar link tweaks: remove underline and turn gray on hover */
+.navbar-text-custom {
+  text-decoration: none !important; /* remove underline */
+  color: inherit !important;
+}
+
+/* Ensure links are visible on a dark navbar, then fade to gray on hover */
+.black-bg-navbar .navbar-text-custom {
+  color: #ffffff !important;
+}
+.black-bg-navbar .navbar-text-custom:hover,
+.black-bg-navbar .navbar-text-custom:focus {
+  color: #9ca3af !important; /* tailwind gray-400 */
+  text-decoration: none !important;
+}
+
+/* also cover visited/active states */
+.black-bg-navbar .navbar-text-custom:visited {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
 

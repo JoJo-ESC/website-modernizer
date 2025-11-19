@@ -1,59 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+/* -------------------------------------------
+   FONT: Inter (clean, modern, industry-standard)
+-------------------------------------------- */
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-color: #000; /* Default dark background */
 }
 
-.navbar-text-custom {
-  font-size: 1.25em;
-  color: whitesmoke;
-}
+/* -------------------------------------------
+   GLOBAL LINK STYLING
+-------------------------------------------- */
 
-.navbar-color {
-  background-color: blue !important;
-}
-
-/* Navbar link tweaks: remove underline and turn gray on hover */
-.navbar-text-custom {
-  text-decoration: none !important; /* remove underline */
-  color: inherit !important;
-}
-
-/* Ensure links are visible on a dark navbar, then fade to gray on hover */
-.black-bg-navbar .navbar-text-custom {
-  color: #ffffff !important;
-}
-.black-bg-navbar .navbar-text-custom:hover,
-.black-bg-navbar .navbar-text-custom:focus {
-  color: #9ca3af !important; /* tailwind gray-400 */
+/* Remove default underlines */
+a {
   text-decoration: none !important;
+  color: inherit; /* Keep link color consistent */
 }
 
-/* also cover visited/active states */
-.black-bg-navbar .navbar-text-custom:visited {
-  color: #ffffff !important;
-  text-decoration: none !important;
+/* Smooth hover transitions */
+a:hover {
+  transition: color 0.2s ease-in-out;
 }
 
+/* -------------------------------------------
+   OPTIONAL: Dark Gradient Background Class
+   Usage: <div class="bg-dark-gradient">...</div>
+-------------------------------------------- */
+.bg-dark-gradient {
+  background: radial-gradient(
+      circle at top left,
+      #111 0%,
+      #000 100%
+  );
+}
 
+/* -------------------------------------------
+   OPTIONAL: Soft Hex-Mesh Overlay Background
+   (Matches the aesthetic in your mockup)
+-------------------------------------------- */
+.bg-hex {
+  background-image: url("/hex-bg.svg"); /* You can generate this SVG later */
+  background-size: 350px;
+  background-repeat: repeat;
+  opacity: 0.08; /* Very subtle */
+  pointer-events: none; /* Does not affect content */
+}

@@ -2,22 +2,28 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function HomePage() {
   const [url, setUrl] = useState("");
+  const router = useRouter();
 
   function handleSubmit(e: any) {
     e.preventDefault();
     if (!url.trim()) return;
-    // Redirect to results page later
-    console.log("Submitted URL:", url);
+    router.push(`/results?url=${encodeURIComponent(url)}`);
   }
 
   return (
     <main className="flex flex-col min-h-screen w-full bg-black text-white overflow-hidden">
 
       {/* 🔹 Hexagon Background Overlay */}
-     <div className="absolute inset-0 bg-[url('/hexglow.svg')] bg-repeat opacity-100 pointer-events-none"></div>
+     {/* <div className="absolute inset-0 bg-[url('/hexglow.svg')] bg-repeat opacity-100 pointer-events-none"></div> */}
+      <div className="geo-layer">
+        <div className="geo-shape geo-1" />
+        <div className="geo-shape geo-2" />
+        <div className="geo-shape geo-3" />
+      </div>
 
 
 
@@ -31,22 +37,25 @@ export default function HomePage() {
         <div className="hidden md:flex gap-12 text-lg items-center">
           <Link
             href="/howitworks"
-            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-black hover:text-white transition-all duration-300"
+            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-white/10 hover:text-gray-100 transition-all duration-200"
           >
             How It Works
           </Link>
 
           <Link
+            href="/howtouse"
+            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-white/10 hover:text-gray-100 transition-all duration-200"
+          >
+            How to Use
+          </Link>
+
+          <Link
             href="/about"
-            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-black hover:text-white transition-all duration-300"
+            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-white/10 hover:text-gray-100 transition-all duration-200"
           >
             About Us
           </Link>
         </div>
-
-        <button className="bg-white text-black px-6 py-2 rounded-md font-medium hover:bg-gray-200">
-          Sign Up
-        </button>
       </nav>
 
       {/* 🔹 HERO SECTION */}

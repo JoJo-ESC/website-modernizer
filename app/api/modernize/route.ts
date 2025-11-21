@@ -1,11 +1,15 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
+import { rateLimit } from '../../lib/rateLimit';
 
 // Optionally ensure this runs on the Node.js runtime for server-side SDKs
 export const runtime = 'nodejs';
 
 // Allow slightly larger request body if needed
 export const maxDuration = 30;
+const MAX_HTML_CHARS = 200_000;
+const MODERNIZE_LIMIT = 40;
+const WINDOW_MS = 60_000;
 
 // Basic utility to strip markdown fences and verify we have HTML
 function stripCodeFences(text: string): string {
@@ -65,6 +69,18 @@ async function callModel(client: OpenAI, model: string, cleanedHtml: string, att
 
 export async function POST(req: Request) {
   try {
+    const clientId = req.headers.get('x-forwarded-for') || 'anonymous';
+    const limit = rateLimit(`modernize:${clientId}`, MODERNIZE_LIMIT, WINDOW_MS);
+    if (!limit.ok) {
+      return NextResponse.json(
+        { error: 'Too many requests, please slow down.' },
+        {
+          status: 429,
+          headers: { 'Retry-After': `${Math.ceil(limit.retryAfter / 1000)}` },
+        }
+      );
+    }
+
     const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
@@ -88,6 +104,12 @@ export async function POST(req: Request) {
       return NextResponse.json(
         { error: 'The "html" field is required and must be a non-empty string.' },
         { status: 400 }
+      );
+    }
+    if (html.length > MAX_HTML_CHARS) {
+      return NextResponse.json(
+        { error: 'HTML is too large to process.' },
+        { status: 413 }
       );
     }
 

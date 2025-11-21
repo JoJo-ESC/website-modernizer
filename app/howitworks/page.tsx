@@ -17,24 +17,27 @@ export default function HowItWorksPage() {
         <div className="hidden md:flex gap-12 text-lg items-center">
        <Link
             href="/howitworks"
-            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-black hover:text-white transition-all duration-300"
+            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-white/10 hover:text-gray-100 transition-all duration-200"
           >
             How It Works
           </Link>
 
           <Link
+            href="/howtouse"
+            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-white/10 hover:text-gray-100 transition-all duration-200"
+          >
+            How to Use
+          </Link>
+
+          <Link
             href="/about"
-            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-black hover:text-white transition-all duration-300"
+            className="bg-black text-white px-6 py-2 rounded-md font-medium hover:bg-white/10 hover:text-gray-100 transition-all duration-200"
           >
             About Us
           </Link>
 
 
         </div>
-
-        <button className="bg-white text-black px-6 py-2 rounded-md font-medium hover:bg-gray-200">
-          Sign Up
-        </button>
       </nav>
 
       {/* 🔹 CONTENT SECTION */}

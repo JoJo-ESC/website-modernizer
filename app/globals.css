@@ -47,6 +47,65 @@ a:hover {
   background-image: url("/hex-bg.svg"); /* You can generate this SVG later */
   background-size: 350px;
   background-repeat: repeat;
-  opacity: 0.08; /* Very subtle */
+  opacity: 1.0; /* Very subtle */
   pointer-events: none; /* Does not affect content */
+}
+
+/* -------------------------------------------
+   Animated geometric background accents
+-------------------------------------------- */
+.geo-layer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.geo-shape {
+  position: absolute;
+  filter: blur(18px);
+  opacity: 0.48;
+  mix-blend-mode: screen;
+  animation: geo-float 6s ease-in-out infinite alternate;
+}
+
+.geo-1 {
+  width: 420px;
+  height: 420px;
+  top: -80px;
+  left: -120px;
+  background: radial-gradient(circle at 30% 30%, #6dd3ff 0%, transparent 60%),
+              radial-gradient(circle at 70% 70%, #3f90ff 0%, transparent 55%);
+}
+
+.geo-2 {
+  width: 360px;
+  height: 360px;
+  bottom: -120px;
+  right: -80px;
+  background: radial-gradient(circle at 25% 25%, #ff8ef2 0%, transparent 60%),
+              radial-gradient(circle at 70% 60%, #805bff 0%, transparent 55%);
+  animation-delay: 4s;
+}
+
+.geo-3 {
+  width: 300px;
+  height: 300px;
+  top: 20%;
+  left: 55%;
+  background: radial-gradient(circle at 40% 40%, #7affb0 0%, transparent 60%),
+              radial-gradient(circle at 80% 70%, #3fbba6 0%, transparent 55%);
+  animation-delay: 8s;
+}
+
+@keyframes geo-float {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate3d(20px, -24px, 0) scale(1.06) rotate(3deg);
+  }
+  100% {
+    transform: translate3d(-26px, 32px, 0) scale(1.08) rotate(-4deg);
+  }
 }

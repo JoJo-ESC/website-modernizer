@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import CopyButton from "../components/CopyButton";
 
@@ -59,7 +59,7 @@ function rewriteAssetsThroughProxy(html: string, baseHref: string) {
   return doc.documentElement.outerHTML || html;
 }
 
-export default function ResultsPage() {
+function ResultsContent() {
   const searchParams = useSearchParams();
   const url = searchParams.get("url") || "";
 
@@ -168,5 +168,13 @@ export default function ResultsPage() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function ResultsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black text-white p-10">Loading...</div>}>
+      <ResultsContent />
+    </Suspense>
   );
 }

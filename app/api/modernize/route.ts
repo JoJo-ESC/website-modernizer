@@ -81,10 +81,10 @@ export async function POST(req: Request) {
       );
     }
 
-    const apiKey = process.env.OPENAI_API_KEY;
+    const apiKey = process.env.OPENROUTER_API_KEY || process.env.OPENAI_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: 'Server misconfiguration: missing OPENAI_API_KEY' },
+        { error: 'Server misconfiguration: missing model API key' },
         { status: 500 }
       );
     }
@@ -114,7 +114,7 @@ export async function POST(req: Request) {
     }
 
      const client = new OpenAI({
-      apiKey: process.env.OPENROUTER_API_KEY,
+      apiKey,
       baseURL: "https://openrouter.ai/api/v1"
      }as any);
 

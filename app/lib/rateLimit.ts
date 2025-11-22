@@ -19,7 +19,7 @@ export function rateLimit(
   }
 
   if (bucket.count >= limit) {
-    return { ok: false; retryAfter: Math.max(bucket.resetAt - now, 0) };
+    return { ok: false, retryAfter: Math.max(bucket.resetAt - now, 0) };
   }
 
   bucket.count += 1;

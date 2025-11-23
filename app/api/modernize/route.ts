@@ -140,7 +140,19 @@ export async function POST(req: Request) {
     }
 
     // Optional: minimal post-cleaning to ensure no <script> sneaks in (should already be sanitized upstream)
-    const finalHtml = cleaned.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
+    let finalHtml = cleaned.replace(/<script[\s\S]*?>[\s\S]*?<\/script>/gi, '');
+
+    // Ensure Tailwind CDN is present
+    if (!finalHtml.includes('cdn.tailwindcss.com')) {
+      const tailwindScript = '<script src="https://cdn.tailwindcss.com"></script>';
+      if (finalHtml.includes('</head>')) {
+        finalHtml = finalHtml.replace('</head>', `${tailwindScript}</head>`);
+      } else if (finalHtml.includes('<html')) {
+         finalHtml = finalHtml.replace('<html>', `<html><head>${tailwindScript}</head>`);
+      } else {
+        finalHtml = `${tailwindScript}${finalHtml}`;
+      }
+    }
 
     return NextResponse.json({ modernized: finalHtml });
   } catch (err) {

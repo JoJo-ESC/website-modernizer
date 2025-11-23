@@ -41,6 +41,7 @@ function rewriteAssetsThroughProxy(html: string, baseHref: string) {
   attrs.forEach((attr) => {
     doc.querySelectorAll<HTMLElement>(`[${attr}]`).forEach((el) => {
       const val = el.getAttribute(attr);
+      if (val?.includes("cdn.tailwindcss.com")) return;
       const absolute = toAbsolute(val);
       if (!absolute) return;
 
@@ -82,7 +83,8 @@ function ResultsContent() {
 
         const scrapeRes = await fetch(`/api/scrape?url=${encodeURIComponent(url)}`);
         if (!scrapeRes.ok) {
-          throw new Error("Failed to scrape URL");
+          const errorData = await scrapeRes.json().catch(() => ({ error: "Unknown error" }));
+          throw new Error(errorData.error || `Failed to scrape URL (${scrapeRes.status})`);
         }
         const original = await scrapeRes.text();
         if (cancelled) return;
@@ -95,7 +97,8 @@ function ResultsContent() {
           body: JSON.stringify({ html: original }),
         });
         if (!modernRes.ok) {
-          throw new Error("Failed to modernize HTML");
+          const errorData = await modernRes.json().catch(() => ({ error: "Unknown error" }));
+          throw new Error(errorData.error || `Failed to modernize HTML (${modernRes.status})`);
         }
         const modernData = await modernRes.json();
         if (cancelled) return;

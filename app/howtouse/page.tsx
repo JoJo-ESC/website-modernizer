@@ -54,9 +54,9 @@ export default function HowToUsePage() {
             </div>
 
             <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-6 space-y-3">
-              <h2 className="text-2xl font-semibold">2) Allow assets to load</h2>
+              <h2 className="text-2xl font-semibold">2) Works best with static sites</h2>
               <p className="text-gray-300">
-                For best visuals, make sure the site allows image/CSS requests. We proxy assets to avoid mixed-content and iframe blocking, but some sites with strict CSP may still hide assets.
+                This tool modernizes <strong>static HTML</strong> and server-rendered pages. JavaScript-heavy sites (React, Vue, Angular) won't work well since we only fetch the source HTML, not the rendered output.
               </p>
             </div>
 
@@ -70,7 +70,7 @@ export default function HowToUsePage() {
             <div className="bg-zinc-900/60 border border-zinc-800 rounded-xl p-6 space-y-3">
               <h2 className="text-2xl font-semibold">4) What to expect</h2>
               <p className="text-gray-300">
-                If something looks blank or broken, it’s usually blocked assets (CSP) or very old markup. Try a different URL or provide public assets for best results.
+                If something looks blank or broken, it's usually blocked assets (CSP), very old markup, or a JavaScript-heavy site. Try a different URL for best results.
               </p>
             </div>
           </div>
@@ -78,7 +78,7 @@ export default function HowToUsePage() {
           <div className="flex gap-4">
             <Link
               href="/"
-              className="inline-block bg-white text-black px-8 py-3 rounded-md font-medium hover:bg-gray-200 transition"
+              className="inline-block bg-white !text-black px-8 py-3 rounded-md font-medium hover:bg-gray-200 transition"
             >
               Try it now
             </Link>

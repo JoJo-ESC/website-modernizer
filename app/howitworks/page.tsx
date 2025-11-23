@@ -78,7 +78,7 @@ export default function HowItWorksPage() {
           <div className="mt-12">
             <Link
               href="/"
-              className="inline-block bg-white text-black px-8 py-3 rounded-md font-medium hover:bg-gray-200 transition"
+              className="inline-block bg-white !text-black px-8 py-3 rounded-md font-medium hover:bg-gray-200 transition"
             >
               Try It Now
             </Link>

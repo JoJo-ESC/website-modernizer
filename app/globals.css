@@ -19,7 +19,6 @@ body {
 /* Remove default underlines */
 a {
   text-decoration: none !important;
-  color: inherit; /* Keep link color consistent */
 }
 
 /* Smooth hover transitions */

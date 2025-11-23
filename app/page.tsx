@@ -86,12 +86,12 @@ export default function HomePage() {
                 placeholder="Enter a URL"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
-                className="w-full p-3 rounded-md bg-black border border-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                className="w-full p-3 rounded-md bg-zinc-900 border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500"
               />
 
               <button
                 type="submit"
-                className="bg-white text-black py-3 rounded-md font-medium hover:bg-gray-200 transition"
+                className="bg-white !text-black py-3 rounded-md font-medium hover:bg-gray-200 transition"
               >
                 Modernize
               </button>

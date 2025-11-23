@@ -27,7 +27,6 @@ Revamp is a full-stack web application that automatically modernizes outdated st
 - **Styling:** Tailwind CSS v4
 - **AI:** OpenRouter API (GPT-4o-mini)
 - **Deployment:** Vercel
-- **Testing:** Vitest
 
 ---
 
@@ -81,22 +80,6 @@ Revamp is a full-stack web application that automatically modernizes outdated st
 
 - **Works best with static HTML sites** – JavaScript-heavy SPAs (React, Vue, Angular) won't render properly since we only fetch source HTML, not the rendered output
 - **Asset loading depends on CORS** – Some sites block cross-origin requests
-
----
-
-## 🧪 Testing
-
-Run the test suite:
-
-```bash
-npm test
-```
-
-Run integration tests:
-
-```bash
-npm run test:integration
-```
 
 ---
 
